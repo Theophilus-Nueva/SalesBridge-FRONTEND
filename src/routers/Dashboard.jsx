@@ -1,32 +1,42 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../components/AuthContext';
-import './Dashboard.css';
+import { fetchGuestTransactions } from '../services/api';
+import './Dashboard.css'; 
 
-export default function Login() {
-  const { user, logout } = useAuth();
+export default function Dashboard() {
+  const { user, token, logout } = useAuth();
   const [transactions, setTransactions] = useState([]);
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    const mockData = [
-      { id: 1, date: '2026-05-18', item: 'Hamburger', amount: 15.00 },
-      { id: 2, date: '2026-05-19', item: 'Iced Tea', amount: 5.00 },
-      { id: 3, date: '2026-05-19', item: 'Spa Massage', amount: 80.00 }
-    ];
-    setTransactions(mockData);
-  }, [user]);
+    const loadData = async () => {
+      try {
+        const data = await fetchGuestTransactions(token);
+        setTransactions(data);
+      } catch (err) {
+        setError('Could not load transactions.');
+      }
+    };
+
+    if (token) {
+      loadData();
+    }
+  }, [token]);
 
   const total = transactions.reduce((sum, tx) => sum + tx.amount, 0);
 
   return (
     <div className="dashboard-container">
       <div className="dashboard-header">
-        <h2>Welcome, {user.name} (Room {user.roomNumber})</h2>
+        <h2>Welcome, {user.name} (Booking {user.bookingId})</h2>
         <button onClick={logout} className="dashboard-logout-btn">Log Out</button>
       </div>
       
       <hr />
       <h3>Your Digital Folio</h3>
       
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+
       <table className="dashboard-table">
         <thead>
           <tr>
@@ -51,4 +61,4 @@ export default function Login() {
       </h3>
     </div>
   );
-};
+}
