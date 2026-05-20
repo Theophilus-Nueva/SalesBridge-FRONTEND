@@ -10,13 +10,14 @@ export default function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const success = login(roomNumber, password);
+    const success = await login(email, password); 
+    
     if (success) {
       navigate('/dashboard');
     } else {
-      setError('Invalid Room Number or Password');
+      setError('Invalid Email or Password');
     }
   };
 
