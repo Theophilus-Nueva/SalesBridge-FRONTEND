@@ -7,13 +7,13 @@ export default function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
 
-  const login = async (bookingId, password) => {
+  const login = async (email, password) => {
     try {
-      const data = await loginGuest(bookingId, password);
+      const data = await loginGuest(email, password);
       setToken(data.access_token);
       
       // Store user metadata
-      setUser({ bookingId: bookingId, name: "Guest" });
+      setUser({ email: email, name: "Guest" });
       return true;
     } catch (error) {
       console.error(error);
