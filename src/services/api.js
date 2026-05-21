@@ -1,8 +1,8 @@
 const API_BASE_URL = "https://salesbridge-backend-production.up.railway.app";
 
-export const loginGuest = async (bookingId, password) => {
+export const loginGuest = async (email, password) => {
   const formData = new URLSearchParams();
-  formData.append("username", bookingId);
+  formData.append("username", email);
   formData.append("password", password || "dummy"); 
 
   const response = await fetch(`${API_BASE_URL}/auth/login`, {
