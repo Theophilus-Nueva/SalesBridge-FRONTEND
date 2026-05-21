@@ -12,7 +12,6 @@ export default function AuthProvider({ children }) {
       const data = await loginGuest(email, password);
       setToken(data.access_token);
       
-      // Store user metadata
       setUser({ email: email, name: "Guest" });
       return true;
     } catch (error) {
